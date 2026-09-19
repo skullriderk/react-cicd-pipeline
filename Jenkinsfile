@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('code pull') {
             steps {
-                // Get some code from a GitHub repository
+                // Get code from a GitHub repository
                 git 'https://github.com/skullriderk/react-cicd-pipeline.git'
             }
         }
@@ -16,7 +16,7 @@ pipeline {
         }
     stage('Docker container') {
             steps {
-                // build docker image
+                // build docker container
                 sh 'docker stop Reactapp || true'
                 sh 'docker rm Reactapp || true'
                sh 'docker run -d --name Reactapp -p 8081:3000 react:v${BUILD_NUMBER}'
