@@ -1,0 +1,39 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'
+    displayName: 'Set up Node.js'
+
+  - script: npm ci
+    displayName: 'Install Dependencies'
+
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'ReactSonarCloud'  # Name of the service connection
+      organization: 'devopsvenkatkorupally'
+      scannerMode: 'CLI'
+      projectKey: 'devopsvenkatkorupally:devopsvenkatkorupally_reactprojb103'
+      projectName: 'ReactProjB103'
+      extraProperties: |
+        sonar.sources=src
+        sonar.exclusions=**/__tests__/**,**/*.test.js,**/*.spec.js,**/node_modules/**
+        sonar.tests=src
+        sonar.test.inclusions=**/*.test.js,**/*.spec.js
+        sonar.javascript.lcov.reportPaths=coverage/lcov.info
+        sonar.sourceEncoding=UTF-8
+
+  - task: SonarCloudAnalyze@1
+    displayName: 'Run SonarCloud Analysis'
+
+  - task: SonarCloudPublish@1
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: 'Publish Quality Gate Result'
