@@ -5,6 +5,7 @@ pipeline {
         stage('code pull') {
             steps {
                 // Get code from a GitHub repository
+                 git branch: 'master',
                 git 'https://github.com/skullriderk/react-cicd-pipeline.git'
             }
         }
